@@ -1,0 +1,35 @@
+<atlassian-plugin key="${atlassian.plugin.key}" name="${project.name}" plugins-version="2">
+    <plugin-info>
+        <description>${project.description}</description>
+        <version>${project.version}</version>
+        <vendor name="${project.organization.name}" url="${project.organization.url}" />
+        <param name="plugin-icon">images/pluginIcon.png</param>
+        <param name="plugin-logo">images/pluginLogo.png</param>
+    </plugin-info>
+
+    <!-- add our i18n resource -->
+    <resource type="i18n" name="i18n" location="autocleanuser"/>
+    
+    <!-- add our web resources -->
+    <web-resource key="autocleanuser-resources" name="autocleanuser Web Resources">
+        <dependency>com.atlassian.auiplugin:ajs</dependency>
+        
+        <resource type="download" name="autocleanuser.css" location="/css/autocleanuser.css"/>
+        <resource type="download" name="autocleanuser.js" location="/js/autocleanuser.js"/>
+        <resource type="download" name="images/" location="/images"/>
+
+        <context>autocleanuser</context>
+    </web-resource>
+    <servlet-filter name="Login Page Filter" key="loginPageFilter" class="com.haieros.plugin.servlet.UserLoginFilter"  weight="20">
+        <description>Login Page Filter.</description>
+        <url-pattern>/</url-pattern>
+        <dispatcher>REQUEST</dispatcher>
+        <dispatcher>FORWARD</dispatcher>
+        <dispatcher>INCLUDE</dispatcher>
+    </servlet-filter>
+    <job-config name="My job" key="myJobId">
+        <job key="autoCleanJob" perClusterJob="true" />
+        <schedule cron-expression="0 0 4 * * ?" jitterSecs="10"/>
+        <managed editable="true" keepingHistory="true" canRunAdhoc="true" canDisable="true"/>
+    </job-config>
+</atlassian-plugin>

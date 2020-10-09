@@ -1,0 +1,24 @@
+#* @vtlvariable name="action" type="com.example.tutorial.plugins.actions.showProperties" *#
+<html>
+<head>
+    <title>Auto Clean Users</title>
+    <meta name="admin.active.section" content="admin_plugins_menu/auto-clean-users-section">
+</head>
+<body>
+<h1>用户清理配置:</h1>
+<form id="adminconfig" class="aui" method="post">
+    <div >
+        <label for="minNumberOfUsers">最小用户数:</label>
+        <input type="text" id="minNumberOfUsers" name="minNumberOfUsers"  class="text" value=$action.getMinNumberOfUsers()>
+    </div>
+    <div >
+        <label for="maxNumberOfUsers">最大用户数:</label>
+        <input type="text" id="maxNumberOfUsers" name="maxNumberOfUsers" class="text" value=$action.getMaxNumberOfUsers()>
+    </div>
+    <div >
+        <label for="deleteNumberOfUsers">清理用户数:</label>
+        <input type="text" id="deleteNumberOfUsers" name="deleteNumberOfUsers" class="text" value=$action.getDeleteNumberOfUsers()>
+    </div>
+</form>
+</body>
+</html>

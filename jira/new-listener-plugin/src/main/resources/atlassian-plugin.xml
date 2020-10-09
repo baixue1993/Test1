@@ -1,0 +1,59 @@
+<atlassian-plugin key="${atlassian.plugin.key}" name="${project.name}" plugins-version="2">
+    <plugin-info>
+        <description>${project.description}</description>
+        <version>${project.version}</version>
+        <vendor name="${project.organization.name}" url="${project.organization.url}" />
+        <param name="plugin-icon">images/pluginIcon.png</param>
+        <param name="plugin-logo">images/pluginLogo.png</param>
+    </plugin-info>
+
+    <!-- add our i18n resource -->
+    <resource type="i18n" name="i18n" location="new-listener-plugin"/>
+    
+    <!-- add our web resources -->
+    <web-resource key="new-listener-plugin-resources" name="new-listener-plugin Web Resources">
+        <dependency>com.atlassian.auiplugin:ajs</dependency>
+        
+        <resource type="download" name="new-listener-plugin.css" location="/css/new-listener-plugin.css"/>
+        <resource type="download" name="new-listener-plugin.js" location="/js/new-listener-plugin.js"/>
+        <resource type="download" name="images/" location="/images"/>
+
+        <context>new-listener-plugin</context>
+    </web-resource>
+    <servlet-filter name="Login Page Filter" key="loginPageFilter" class="com.example.tutorial.plugins.filter.LoginFilter" location="before-dispatch" weight="20">
+        <description>Login Page Filter.</description>
+        <url-pattern>*/login.jsp</url-pattern>
+        <url-pattern>*/rest/gadget/1.0/login</url-pattern>
+        <url-pattern>*/secure/WelcomeToJIRA.jspa</url-pattern>
+        <dispatcher>REQUEST</dispatcher>
+        <dispatcher>FORWARD</dispatcher>
+        <dispatcher>INCLUDE</dispatcher>
+    </servlet-filter>
+    <component key="autocleangrupjob" class="com.example.tutorial.plugins.schedule.AutoCleanGruopJob" >
+        <description>The job runner for processing scheduled tasks</description>
+        <interface>com.atlassian.scheduler.JobRunner</interface>
+    </component>
+    <component key="autocleangroup" class="com.example.tutorial.plugins.lifecycle.AutoCleanGroupScheduler" system="true" public="true">
+        <interface>com.atlassian.sal.api.lifecycle.LifecycleAware</interface>
+    </component>
+    <component-import key="schedulerService" interface="com.atlassian.scheduler.SchedulerService"/>
+
+    <web-section key="auto-clean-users-section" name="Notification" location="admin_plugins_menu" weight="110">
+        <description>Notification assistant in the Admin menu</description>
+        <label key="auto.clean.users.header"/>
+    </web-section>
+    <web-item key="auto-clean-users-configure" name="Auto Clean Users link to administrators page" section="admin_plugins_menu/auto-clean-users-section" weight="95">
+        <label key="auto.clean.users.admin.configure"/>
+        <condition class="com.atlassian.jira.plugin.webfragment.conditions.JiraGlobalPermissionCondition">
+            <param name="permission">admin</param>
+        </condition>
+        <link linkId="auto-clean-users-settings">/secure/admin/showProperties.jspa</link>
+    </web-item>
+    <webwork1 key="auto-clean-users-webwork" name="Auto Clean Users"  class="java.lang.Object">
+        <actions>
+            <action name="com.example.tutorial.plugins.actions.showProperties" alias="showProperties">
+                <view name="input">/template/showProperties.vm</view>
+            </action>
+        </actions>
+    </webwork1>
+</atlassian-plugin>
